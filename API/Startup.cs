@@ -27,6 +27,8 @@ public class Startup
         // Registrar el repositorio de especies
         services.AddScoped<IEspecie, EspecieAD>();
         services.AddScoped<IFamilia, FamiliaAD>();
+        services.AddScoped<IUbicacion, UbicacionAD>();
+        services.AddScoped<ISemilla, SemillaAD>();
 
         // Configurar controladores y JSON
         services.AddControllers()

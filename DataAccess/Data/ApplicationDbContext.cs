@@ -17,6 +17,8 @@ namespace DataAccess.Data
 
         public DbSet<Especie> Especies { get; internal set; }
         public DbSet<Familia> Familias { get; internal set; }
+        public DbSet<Ubicacion> Ubicaciones { get; internal set; }
+        public DbSet<Semilla> Semillas { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +29,12 @@ namespace DataAccess.Data
 
             modelBuilder.Entity<Familia>()
                 .HasKey(e => e.idFamilia);
+
+            modelBuilder.Entity<Ubicacion>()
+                .HasKey(e => e.idUbicacion);
+
+            modelBuilder.Entity<Semilla>()
+                .HasKey(e => e.idSemilla);
         }
     }
 }

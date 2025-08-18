@@ -10,7 +10,7 @@ namespace UI.Models
         public string nombreCientifico { get; set; }
         public string nombreComun { get; set; }
         public string descripcion { get; set; }
-        public int? idFamilia { get; set; }
+        public int idFamilia { get; set; }
 
         public List<Familia> familias { get; set; } = new List<Familia>();
     }
