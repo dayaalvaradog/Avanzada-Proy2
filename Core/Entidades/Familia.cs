@@ -8,7 +8,7 @@ namespace Core.Entidades
 {
     public class Familia
     {
-        int idFamilia { get; set; }
-        string nombre { get; set; }
+        public int idFamilia { get; set; }
+        public string nombre { get; set; }
     }
 }

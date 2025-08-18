@@ -1,0 +1,93 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@using Core.Entidades
+@model EspecieViewModel;
+
+<h2>Editar Especie</h2>
+
+<form id="EditarEspecie" asp-action="Agregar" method="post">
+    <div class="form-group">
+        <input type="hidden" asp-for="idEspecie" />
+        <label>Nombre Científico</label>
+        <input asp-for="nombreCientifico" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Nombre Común</label>
+        <input asp-for="nombreComun" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Descripción</label>
+        <textarea asp-for="descripcion" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Familia</label>
+        @{
+            // Crea el SelectList en el lado de la vista
+            var familiaSelectList = new SelectList(Model.familias, "idFamilia", "nombre");
+        }
+        <select asp-for="idFamilia" class="form-control" asp-items="familiaSelectList">
+            <option value="">Seleccione una familia</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+<div id="mensaje" class="mt-3"></div>
+
+@section Scripts {
+    <script>
+        document.getElementById('EditarEspecie').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const mensajeDiv = document.getElementById('mensaje');
+            mensajeDiv.innerHTML = '';
+
+            const form = this;
+            const formData = new FormData(form);
+            const especieData = {
+                idEspecie: parseInt(formData.get('idEspecie')),
+                nombreCientifico: formData.get('nombreCientifico'),
+                nombreComun: formData.get('nombreComun'),
+                descripcion: formData.get('descripcion'),
+                idFamilia: parseInt(formData.get('idFamilia'))
+            };
+
+            const API_BASE_URL = "@Configuration["AppSettings:ApiBaseUrl"]";
+            const apiUrl = `${API_BASE_URL}/api/Especies/${especieData.idEspecie}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(especieData)
+                });
+
+                if (response.ok) {
+                    mensajeDiv.className = 'alert alert-success';
+                    mensajeDiv.innerHTML = `Especie '${especieData.nombreComun}' actualizada exitosamente.`;
+                    setTimeout(() => {
+                        window.location.href = '/Especies/Index';
+                    }, 3000);
+                } else {
+                    const errorData = await response.json();
+                    mensajeDiv.className = 'alert alert-danger';
+                    let errorMessage = 'Error al actualizar especie: ';
+                    if (errorData.errors) {
+                        for (const key in errorData.errors) {
+                            errorMessage += `${key}: ${errorData.errors[key].join(', ')} `;
+                        }
+                    } else {
+                        errorMessage += errorData.title || errorData.detail || JSON.stringify(errorData);
+                    }
+                    mensajeDiv.innerHTML = errorMessage;
+                    console.error('Error del API:', errorData);
+                }
+            } catch (error) {
+                console.error('Error de red al guardar la especie:', error);
+                mensajeDiv.className = 'alert alert-danger';
+                mensajeDiv.innerHTML = `Ocurrió un error de red: ${error.message}. Asegúrate de que la API está corriendo y las configuraciones de CORS son correctas.`;
+            }
+        });
+    </script>
+}

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Entidades;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +15,18 @@ namespace DataAccess.Data
         {
         }
 
+        public DbSet<Especie> Especies { get; internal set; }
+        public DbSet<Familia> Familias { get; internal set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Especie>()
+                .HasKey(e => e.idEspecie);
 
-
+            modelBuilder.Entity<Familia>()
+                .HasKey(e => e.idFamilia);
         }
     }
 }
