@@ -8,8 +8,9 @@ namespace Core.Entidades
 {
     public class TipoFrecuencia
     {
-        int idTipoFrecuencia { get; set; }
-        string frecuencia { get; set; }
+        public int idTipoFrecuencia { get; set; }
+        public string frecuencia { get; set; }
+        public string unidadFrecuencia { get; set; }
 
     }
 }

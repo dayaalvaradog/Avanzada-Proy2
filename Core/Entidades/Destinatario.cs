@@ -8,9 +8,9 @@ namespace Core.Entidades
 {
     public class Destinatario
     {
-        int idDestinatario { get; set; }
-        string nombre { get; set; }
-        string apellido { get; set; }
-        string email { get; set; }
+        public int idDestinatario { get; set; }
+        public string nombre { get; set; }
+        public string apellido { get; set; }
+        public string email { get; set; }
     }
 }

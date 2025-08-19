@@ -32,6 +32,10 @@ public class Startup
         services.AddScoped<IUbicacion, UbicacionAD>();
         // Registrar el repositorio de semillas
         services.AddScoped<ISemilla, SemillaAD>();
+        // Registrar el repositorio de reportes
+        services.AddScoped<IReporte, ReporteAD>();
+
+        services.AddHttpClient();
 
         // Configurar controladores y JSON
         services.AddControllers()

@@ -12,6 +12,7 @@ namespace Core.Entidades
         /// Representa un parámetro de configuración del reporte.
         /// </summary>
         
+        public int idParametro { get; set; }
         public DateTime? fechaDesde { get; set; }
         public DateTime? fechaHasta { get; set; }
         public List<Especie>? especies { get; set; }
