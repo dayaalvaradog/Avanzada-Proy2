@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,8 +18,9 @@ namespace Core.Entidades
         public int minuto { get; set; }
         public bool activo { get; set; }
         public int idTipoFrecuencia { get; set; }
+        [ForeignKey("idParametro")] 
         public int idParametro { get; set; }
-        public int idUsuario { get; set; }
+        public int? idUsuario { get; set; } = 1;
 
         public TipoFrecuencia tipoFrecuencia { get; set; }
         public Parametro parametros { get; set; }

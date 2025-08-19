@@ -35,8 +35,6 @@ public class Startup
         // Registrar el repositorio de reportes
         services.AddScoped<IReporte, ReporteAD>();
 
-        services.AddHttpClient();
-
         // Configurar controladores y JSON
         services.AddControllers()
             .AddNewtonsoftJson(options =>
