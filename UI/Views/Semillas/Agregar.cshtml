@@ -1,32 +1,35 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @using Core.Entidades
-@model EspecieViewModel;
+@model SemillaViewModel;
 
-<h2>Editar Especie</h2>
+<h2>Agregar Semilla</h2>
 
-<form id="EditarEspecie" asp-action="Editar" method="post">
+<form id="AgregarSemilla" asp-action="Agregar" method="post">
     <div class="form-group">
-        <input type="hidden" asp-for="idEspecie" />
-        <label>Nombre Científico</label>
-        <input asp-for="nombreCientifico" class="form-control" />
+        <label>Nombre</label>
+        <input asp-for="nombre" class="form-control" />
     </div>
     <div class="form-group">
-        <label>Nombre Común</label>
-        <input asp-for="nombreComun" class="form-control" />
+        <label>Cantidad</label>
+        <input asp-for="cantidad" class="form-control" />
     </div>
     <div class="form-group">
-        <label>Descripción</label>
-        <textarea asp-for="descripcion" class="form-control"></textarea>
-    </div>
-    <div class="form-group">
-        <label>Familia</label>
+        <label>Especie</label>
         @{
-            // Crea el SelectList en el lado de la vista
-            var familiaSelectList = new SelectList(Model.familias, "idFamilia", "nombre");
+            var especieSelectList = new SelectList(Model.especies, "idEspecie", "nombreComun");
         }
-        <select asp-for="idFamilia" class="form-control" asp-items="familiaSelectList">
-            <option value="">Seleccione una familia</option>
+        <select asp-for="idEspecie" class="form-control" asp-items="especieSelectList">
+            <option value="">Seleccione una especie</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Ubicación</label>
+        @{
+            var ubicacionSelectList = new SelectList(Model.ubicaciones, "idUbicacion", "nombre");
+        }
+        <select asp-for="idUbicacion" class="form-control" asp-items="ubicacionSelectList">
+            <option value="">Seleccione una ubicación</option>
         </select>
     </div>
     <button type="submit" class="btn btn-primary">Guardar</button>
@@ -35,44 +38,41 @@
 
 @section Scripts {
     <script>
-        document.getElementById('EditarEspecie').addEventListener('submit', async function(e) {
+        document.getElementById('AgregarSemilla').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const mensajeDiv = document.getElementById('mensaje');
             mensajeDiv.innerHTML = '';
 
-            const form = this;
-            const formData = new FormData(form);
-            const especieData = {
+            const formData = new FormData(this);
+            const semillaData = {
+                nombre: formData.get('nombre'),
                 idEspecie: parseInt(formData.get('idEspecie')),
-                nombreCientifico: formData.get('nombreCientifico'),
-                nombreComun: formData.get('nombreComun'),
-                descripcion: formData.get('descripcion'),
-                idFamilia: parseInt(formData.get('idFamilia'))
+                idUbicacion: parseInt(formData.get('idUbicacion')),
+                cantidad: parseInt(formData.get('cantidad'))
             };
 
             const API_BASE_URL = "@Configuration["AppSettings:ApiBaseUrl"]";
-            const apiUrl = `${API_BASE_URL}/api/Especies/${especieData.idEspecie}`;
+            const apiUrl = `${API_BASE_URL}/api/Semillas`;
 
             try {
                 const response = await fetch(apiUrl, {
-                    method: 'PUT',
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(especieData)
+                    body: JSON.stringify(semillaData)
                 });
 
                 if (response.ok) {
+                    const result = await response.json();
                     mensajeDiv.className = 'alert alert-success';
-                    mensajeDiv.innerHTML = `Especie '${especieData.nombreComun}' actualizada exitosamente.`;
-                    setTimeout(() => {
-                        window.location.href = '/Especies/Index';
-                    }, 3000);
+                    mensajeDiv.innerHTML = `Semilla '${result.nombre}' ingresada exitosamente con ID: ${result.idSemilla}.`;
+                    this.reset();
                 } else {
                     const errorData = await response.json();
                     mensajeDiv.className = 'alert alert-danger';
-                    let errorMessage = 'Error al actualizar especie: ';
+                    let errorMessage = 'Error al ingresar semilla: ';
                     if (errorData.errors) {
                         for (const key in errorData.errors) {
                             errorMessage += `${key}: ${errorData.errors[key].join(', ')} `;
@@ -84,10 +84,11 @@
                     console.error('Error del API:', errorData);
                 }
             } catch (error) {
-                console.error('Error de red al guardar la especie:', error);
+                console.error('Error de red al guardar la semilla:', error);
                 mensajeDiv.className = 'alert alert-danger';
                 mensajeDiv.innerHTML = `Ocurrió un error de red: ${error.message}. Asegúrate de que la API está corriendo y las configuraciones de CORS son correctas.`;
             }
         });
     </script>
 }
+

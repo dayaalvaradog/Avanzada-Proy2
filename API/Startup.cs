@@ -26,8 +26,11 @@ public class Startup
         services.AddCors();
         // Registrar el repositorio de especies
         services.AddScoped<IEspecie, EspecieAD>();
+        // Registrar el repositorio de familias
         services.AddScoped<IFamilia, FamiliaAD>();
+        // Registrar el repositorio de ubicaciones 
         services.AddScoped<IUbicacion, UbicacionAD>();
+        // Registrar el repositorio de semillas
         services.AddScoped<ISemilla, SemillaAD>();
 
         // Configurar controladores y JSON

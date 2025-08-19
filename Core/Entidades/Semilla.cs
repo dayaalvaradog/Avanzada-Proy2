@@ -32,6 +32,6 @@ namespace Core.Entidades
         [ValidateNever]
         public Ubicacion ubicacion { get; set; }
         public int cantidad { get; set; }
-        public DateTime fechaAlmacenamiento { get; set; }
+        public DateTime fechaAlmacenamiento { get; set; } = DateTime.Now;
     }
 }

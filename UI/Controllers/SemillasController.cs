@@ -59,7 +59,7 @@ namespace UI.Controllers
 
             if (response2.IsSuccessStatusCode)
             {
-                var json2 = await response.Content.ReadAsStringAsync();
+                var json2 = await response2.Content.ReadAsStringAsync();
                 viewModel.ubicaciones = JsonSerializer.Deserialize<List<Ubicacion>>(json2, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             }
             else
@@ -96,6 +96,8 @@ namespace UI.Controllers
             {
                 idSemilla = semilla.idSemilla,
                 nombre = semilla.nombre,
+                idEspecie = semilla.idEspecie,
+                idUbicacion = semilla.idUbicacion,
                 especies = especies,
                 ubicaciones = ubicaciones,
                 cantidad = semilla.cantidad,
